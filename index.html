@@ -30,8 +30,15 @@
         let etapa = 1;
         
         function carregar() {
-            fetch(`etapa-${etapa}.htm`)
-                .then(r => r.text())
+            const arquivo = window.location.origin === 'http://localhost:8080' || window.location.hostname === 'localhost' 
+                ? `etapa-${etapa}.htm`
+                : `/etapa-${etapa}.htm`;
+            
+            fetch(arquivo)
+                .then(r => {
+                    if (!r.ok) throw new Error('Arquivo não encontrado: ' + arquivo);
+                    return r.text();
+                })
                 .then(html => {
                     document.getElementById('container').innerHTML = html;
                     document.getElementById('counter').textContent = etapa + ' / 18';
@@ -41,7 +48,10 @@
                     if(etapa === 18) document.getElementById('next').textContent = 'Finalizar ✓';
                     else document.getElementById('next').textContent = 'Próximo →';
                 })
-                .catch(e => document.getElementById('container').innerHTML = '<div style="padding: 20px; color: red;">Erro ao carregar etapa ' + etapa + '</div>');
+                .catch(e => {
+                    console.error('Erro:', e);
+                    document.getElementById('container').innerHTML = '<div style="padding: 20px; color: red;">Erro ao carregar: ' + e.message + '</div>';
+                });
         }
         
         function proximo() { if(etapa < 18) { etapa++; carregar(); } }
