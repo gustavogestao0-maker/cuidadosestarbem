@@ -1,63 +1,73 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
-    <style>
-        body { margin: 0; padding: 0; }
-        #container { width: 100%; height: 100vh; overflow: hidden; }
-        .nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; background: white; padding: 10px 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .nav button { padding: 8px 15px; margin: 0 5px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .nav button:disabled { opacity: 0.5; cursor: not-allowed; }
-        #prev { background: #ccc; }
-        #next { background: #4CAF50; color: white; }
-        #counter { margin: 0 10px; font-weight: bold; }
-        #progress { position: fixed; top: 0; left: 0; height: 3px; background: #4CAF50; z-index: 9998; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz 18 Etapas</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    
+    .etapa { display: none !important; }
+    .etapa.active { display: block !important; }
+  </style>
 </head>
 <body>
-    <div id="progress"></div>
-    <div id="container"></div>
+  <div id="quizContainer"></div>
+  
+  <script>
+    let etapaAtual = 1;
+    const totalEtapas = 18;
+    const container = document.getElementById('quizContainer');
     
-    <div class="nav">
-        <button id="prev" onclick="voltar()">← Voltar</button>
-        <span id="counter">1 / 18</span>
-        <button id="next" onclick="proximo()">Próximo →</button>
-    </div>
-
-    <script>
-        let etapa = 1;
+    async function carregarEtapa(numero) {
+      try {
+        const response = await fetch(`./pages/etapa-${numero}.json`);
         
-        function carregar() {
-            const arquivo = window.location.origin === 'http://localhost:8080' || window.location.hostname === 'localhost' 
-                ? `etapa-${etapa}.htm`
-                : `/etapa-${etapa}.htm`;
-            
-            fetch(arquivo)
-                .then(r => {
-                    if (!r.ok) throw new Error('Arquivo não encontrado: ' + arquivo);
-                    return r.text();
-                })
-                .then(html => {
-                    document.getElementById('container').innerHTML = html;
-                    document.getElementById('counter').textContent = etapa + ' / 18';
-                    document.getElementById('progress').style.width = (etapa/18*100) + '%';
-                    document.getElementById('prev').disabled = etapa === 1;
-                    document.getElementById('next').disabled = etapa === 18;
-                    if(etapa === 18) document.getElementById('next').textContent = 'Finalizar ✓';
-                    else document.getElementById('next').textContent = 'Próximo →';
-                })
-                .catch(e => {
-                    console.error('Erro:', e);
-                    document.getElementById('container').innerHTML = '<div style="padding: 20px; color: red;">Erro ao carregar: ' + e.message + '</div>';
-                });
+        if (!response.ok) {
+          throw new Error('Arquivo não encontrado');
         }
         
-        function proximo() { if(etapa < 18) { etapa++; carregar(); } }
-        function voltar() { if(etapa > 1) { etapa--; carregar(); } }
+        const data = await response.json();
+        container.innerHTML = data.conteudo;
         
-        carregar();
-    </script>
+        // Re-adicionar listeners após carregar
+        const clickListener = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          proximaEtapa();
+          return false;
+        };
+        
+        const submitListener = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          proximaEtapa();
+          return false;
+        };
+        
+        document.addEventListener('click', clickListener, true);
+        document.addEventListener('submit', submitListener, true);
+        
+        window.scrollTo(0, 0);
+      } catch (err) {
+        console.error('Erro ao carregar etapa:', err);
+        container.innerHTML = `<div style="padding: 20px; text-align: center;"><h2>Erro ao carregar etapa ${numero}</h2><p>${err.message}</p></div>`;
+      }
+    }
+    
+    function proximaEtapa() {
+      if (etapaAtual < totalEtapas) {
+        etapaAtual++;
+        carregarEtapa(etapaAtual);
+      }
+    }
+    
+    // Inicializar
+    carregarEtapa(1);
+  </script>
 </body>
 </html>
