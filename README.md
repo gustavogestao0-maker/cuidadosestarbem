@@ -1,26 +1,14 @@
-# Quiz 18 Etapas
+# 🎯 Protocolo da Diabetes - Quiz Clone
 
-Quiz interativo com 18 etapas.
+Quiz com 18 etapas **CLONADO** da Inlead com imagens REAIS.
 
-## Como rodar localmente
+## Deploy Vercel
 
-```bash
-# Instalar dependências (opcional)
-npm install
+1. Extrai o ZIP
+2. Push no GitHub
+3. Conecta no Vercel
+4. Pronto! 🚀
 
-# Rodar servidor local
-npm run dev
-```
+---
 
-Abra `http://localhost:3000` no navegador.
-
-## Deploy no Vercel
-
-1. Faça push no GitHub
-2. Conecte seu repositório no Vercel
-3. Vercel fará deploy automático
-
-## Arquivos
-
-- `pages/index.html` - Arquivo principal do quiz
-- `vercel.json` - Configuração para Vercel
+**CLONE 100% VISUAL** ✅

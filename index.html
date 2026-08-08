@@ -3,71 +3,545 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz 18 Etapas</title>
+  <title>Protocolo da Diabetes</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      background: #fff; 
+      color: #333;
+      line-height: 1.6;
+    }
     
-    .etapa { display: none !important; }
-    .etapa.active { display: block !important; }
+    .container { width: 100%; min-height: 100vh; }
+    .wrapper { max-width: 800px; width: 100%; margin: 0 auto; padding: 20px; }
+    
+    .etapa { display: none; animation: fadeIn 0.5s; }
+    .etapa.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    
+    /* HEADER */
+    .header-bar { width: 60px; height: 4px; background: #27ae60; margin-bottom: 30px; }
+    .header-logo { text-align: center; margin-bottom: 20px; }
+    .header-logo-small { font-size: 12px; color: #27ae60; letter-spacing: 2px; font-weight: 600; }
+    .header-logo-large { font-size: 36px; color: #27ae60; font-weight: bold; font-style: italic; }
+    
+    /* TÍTULOS */
+    h1 { font-size: 22px; font-weight: bold; margin: 20px 0 10px; line-height: 1.4; }
+    .destaque { color: #27ae60; font-weight: bold; }
+    .subtitulo { color: #999; font-size: 13px; margin: 10px 0 20px; }
+    .link-color { color: #2980b9; text-decoration: none; }
+    
+    /* GRID 4 (2x2) */
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 30px 0; }
+    .grid-item { border: 4px solid #27ae60; border-radius: 12px; overflow: hidden; cursor: pointer; }
+    .grid-item img { width: 100%; height: auto; display: block; }
+    
+    /* GRID 2 */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+    .card { border: 2px solid #ddd; border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.3s; }
+    .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .card img { width: 100%; height: 140px; object-fit: cover; }
+    .card-text { padding: 12px; text-align: center; font-weight: bold; font-size: 14px; }
+    
+    /* BOTÕES */
+    .btn { width: 100%; padding: 16px; margin: 12px 0; background: #27ae60; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+    .btn:hover { background: #229954; }
+    .btn:active { background: #1e8449; }
+    
+    /* OPÇÕES */
+    .opcao { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 16px; margin: 10px 0; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.3s; }
+    .opcao:hover { border-color: #27ae60; background: #f9f9f9; }
+    .opcao.selected { background: #27ae60; color: white; border-color: #27ae60; }
+    .opcao input { cursor: pointer; width: 20px; height: 20px; accent-color: #27ae60; }
+    .opcao-text { flex: 1; }
+    
+    /* ALERT */
+    .alert { background: #27ae60; color: white; padding: 15px; border-radius: 8px; margin: 15px 0; font-size: 14px; text-align: center; }
+    
+    /* VERMELHO ALERT */
+    .alert-red { background: white; color: #e74c3c; padding: 15px; border-radius: 8px; margin: 15px 0; font-size: 14px; }
+    
+    /* CARD VERDE GRANDE */
+    .card-big { background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%); color: white; padding: 30px 20px; border-radius: 12px; text-align: center; margin: 30px 0; box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3); }
+    .card-big h2 { font-size: 13px; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+    .card-big h1 { font-size: 32px; margin: 10px 0; font-style: italic; }
+    
+    /* BARRAS DE PROGRESSO */
+    .progress-container { margin: 20px 0; }
+    .progress-label { font-size: 13px; font-weight: bold; margin-bottom: 8px; color: #333; }
+    .progress-bar { background: #f0f0f0; height: 25px; border-radius: 8px; overflow: hidden; position: relative; margin-bottom: 15px; }
+    .progress-fill { height: 100%; background: #27ae60; width: 0%; transition: width 0.8s ease; }
+    .progress-percent { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 12px; font-weight: bold; color: #333; }
+    
+    /* AUDIO */
+    .audio-container { margin: 20px 0; text-align: center; background: white; padding: 15px; border-radius: 8px; border: 1px solid #f0f0f0; display: flex; align-items: center; gap: 15px; }
+    .audio-avatar { width: 50px; height: 50px; border-radius: 50%; background: #ddd; flex-shrink: 0; }
+    audio { flex: 1; }
+    
+    /* DEPOIMENTO */
+    .depoimento { background: #f9f9f9; border-left: 4px solid #27ae60; padding: 15px; margin: 20px 0; border-radius: 4px; font-size: 13px; line-height: 1.6; }
+    .depoimento-header { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 10px; }
+    .avatar { width: 40px; height: 40px; border-radius: 50%; background: #ddd; flex-shrink: 0; }
+    .depoimento-name { font-weight: bold; margin: 0; }
+    .depoimento-local { font-size: 11px; color: #999; margin: 0; }
+    
+    /* CARROSSEL */
+    .carousel { position: relative; margin: 20px 0; }
+    .carousel img { width: 100%; border-radius: 8px; }
+    .carousel-dots { text-align: center; margin-top: 10px; }
+    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ddd; margin: 0 5px; cursor: pointer; }
+    .dot.active { background: #27ae60; }
+    
+    /* ANTES/DEPOIS */
+    .before-after { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+    .ba-item { text-align: center; }
+    .ba-label { font-weight: bold; margin-bottom: 10px; }
+    .ba-item img { width: 100%; border-radius: 8px; }
+    .ba-progress { height: 8px; background: #e0e0e0; border-radius: 4px; margin-top: 10px; overflow: hidden; }
+    .ba-progress-fill { height: 100%; background: #27ae60; width: 30%; }
+    
+    /* VIDEO */
+    .video-container { position: relative; width: 100%; padding-bottom: 56.25%; margin: 20px 0; }
+    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    
+    /* BADGE */
+    .badge-30 { background: linear-gradient(135deg, #f0ad4e 0%, #ec971f 100%); border: 3px solid #d58512; border-radius: 50%; width: 120px; height: 120px; margin: 30px auto; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .badge-30-num { font-size: 48px; font-weight: bold; }
+    .badge-30-text { font-size: 12px; font-weight: bold; }
+    
+    /* TABELA */
+    .table-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 2px solid #2980b9; border-radius: 8px; overflow: hidden; margin: 20px 0; }
+    .table-cell { padding: 15px; border-bottom: 1px solid #ddd; }
+    .table-cell:nth-child(odd) { background: #f5f5f5; }
+    .table-cell:last-child, .table-cell:nth-last-child(2) { border-bottom: none; }
   </style>
 </head>
 <body>
-  <div id="quizContainer"></div>
+  <div class="container">
+    <div class="wrapper">
+      <div id="container"></div>
+    </div>
+  </div>
   
   <script>
     let etapaAtual = 1;
+    let generoSelecionado = null;
+    let progressInterval = null;
     const totalEtapas = 18;
-    const container = document.getElementById('quizContainer');
     
-    async function carregarEtapa(numero) {
-      try {
-        const response = await fetch(`./pages/etapa-${numero}.json`);
+    function renderEtapa(numero) {
+      const html = {
+        1: `
+          <div class="header-bar"></div>
+          <h1>URGENTE: <span class="destaque">TRUQUE CASEIRO DE 14 DIAS</span><br>
+          ESTA ELIMINANDO PARASITA DIABETICO<br>
+          E ACABANDO COM A DIABETES TIPO 2.</h1>
+          <p class="subtitulo">RESPONDA ESSE RÁPIDO TESTE GRATUITO E APRENDA COMO ELIMINAR ESSA PARASITA DO SEU CORPO E FICAR LIVRE DA DIABETES.</p>
+          <div class="grid-4">
+            <div class="grid-item" onclick="proximaEtapa()"><img src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-bHp0d-urgente-truque-caseiro-diabetes.webp" alt=""></div>
+          </div>
+          <button class="btn" onclick="proximaEtapa()">QUERO APRENDER TAMBÉM!</button>
+        `,
         
-        if (!response.ok) {
-          throw new Error('Arquivo não encontrado');
-        }
+        2: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Vamos iniciar sua avaliação</h1>
+          <p class="subtitulo">Selecione sua opção abaixo!</p>
+          <div class="grid-2">
+            <div class="card" onclick="selecionarGenero('homem'); proximaEtapa()">
+              <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/md-exvdi-homem-diabetes.webp" alt="">
+              <div class="card-text">Sou Homem</div>
+            </div>
+            <div class="card" onclick="selecionarGenero('mulher'); proximaEtapa()">
+              <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/md-A8Myu-mulher-diabetes.webp" alt="">
+              <div class="card-text">Sou mulher</div>
+            </div>
+          </div>
+        `,
         
-        const data = await response.json();
-        container.innerHTML = data.conteudo;
+        3: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Você sente algum desses sintomas <span class="destaque">A MAIS DE 1 ANO?</span></h1>
+          <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-bWhOM-voce-sente-algum-sintoma.webp" alt="" style="width: 100%; margin: 20px 0; border-radius: 8px;">
+          <button class="btn" onclick="proximaEtapa()">Sinto mais de 1 👍</button>
+          <button class="btn" onclick="proximaEtapa()">Sinto 2 ou mais 😊</button>
+        `,
         
-        // Re-adicionar listeners após carregar
-        const clickListener = function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          e.stopImmediatePropagation();
-          proximaEtapa();
-          return false;
-        };
+        4: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Você já <span class="destaque">Desparasitou</span> de alguma maneira?</h1>
+          <p class="subtitulo">Utilizando remédios ou formas naturais.</p>
+          <button class="btn" onclick="proximaEtapa()">😁 Não, eu nunca desparasitei.</button>
+          <button class="btn" onclick="proximaEtapa()">😭 Sim, eu já desparasitei.</button>
+        `,
         
-        const submitListener = function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          e.stopImmediatePropagation();
-          proximaEtapa();
-          return false;
-        };
+        5: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <div class="alert-red">
+            <strong>Se você nunca fez uma Desparasitação Natural, cuidado: os vermes podem se multiplicar no seu corpo e alcançar órgãos vitais como cérebro, coração e pulmões. Não ignore esse risco, é <span class="destaque">essencial desparasitar pelo menos uma vez ao ano</span></strong>
+          </div>
+          <p style="text-align: center; margin: 20px 0;"><a href="#" class="link-color">Veja essa Notícia do G1 👇</a></p>
+          <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-3rmMi-jovem-morre-diabetes.webp" alt="" style="width: 100%; margin: 20px 0; border-radius: 8px;">
+          <button class="btn" onclick="proximaEtapa()">Continuar!</button>
+        `,
         
-        document.addEventListener('click', clickListener, true);
-        document.addEventListener('submit', submitListener, true);
+        6: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Você tem ciência que a <span class="destaque">falta de cuidados com esse assunto pode piorar sua diabetes e deixar sequelas que podem ser irreversíveis?</span></h1>
+          <p class="subtitulo">Por favor, seja sincero.</p>
+          <button class="btn" onclick="proximaEtapa()">✌️ Sim, eu sei da gravidade que o ter parasitas habitando o meu intestino.</button>
+          <button class="btn" onclick="proximaEtapa()">❤️ Não sabia da gravidade, mais quero cuidar.</button>
+        `,
         
-        window.scrollTo(0, 0);
-      } catch (err) {
-        console.error('Erro ao carregar etapa:', err);
-        container.innerHTML = `<div style="padding: 20px; text-align: center;"><h2>Erro ao carregar etapa ${numero}</h2><p>${err.message}</p></div>`;
+        7: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Você concorda comigo que na maioria das vezes o consumo Exagerado de Doces e a má <span class="destaque">alimentação não é nossa culpa, somos taxados como desequilibrados mas isso se deve ao nosso organismo estar inflamado por conta de parasitas intestinais?</span></h1>
+          <p class="subtitulo">Por favor, seja sincera, quero ajudar!</p>
+          <button class="btn" onclick="proximaEtapa()">Eu concordo sim!</button>
+          <button class="btn" onclick="proximaEtapa()">Concordo em partes.</button>
+        `,
+        
+        8: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Dentro dos <span class="destaque">sintomas listados abaixo</span>, quais mais te incomodam?</h1>
+          <p class="subtitulo">Selecione um a mais.</p>
+          <div class="opcao" onclick="this.classList.toggle('selected')"><input type="checkbox"><span class="opcao-text">INSÔNIA</span></div>
+          <div class="opcao" onclick="this.classList.toggle('selected')"><input type="checkbox"><span class="opcao-text">FADIGA</span></div>
+          <div class="opcao" onclick="this.classList.toggle('selected')"><input type="checkbox"><span class="opcao-text">SEDE EXCESSIVA</span></div>
+          <div class="opcao" onclick="this.classList.toggle('selected')"><input type="checkbox"><span class="opcao-text">FORMIGAMENTO</span></div>
+          <div class="opcao" onclick="this.classList.toggle('selected')"><input type="checkbox"><span class="opcao-text">VISÃO EMBAÇADA</span></div>
+          <div class="opcao" onclick="this.classList.toggle('selected')"><input type="checkbox"><span class="opcao-text">DORES NO CORPO</span></div>
+          <button class="btn" onclick="proximaEtapa()">Continuar</button>
+        `,
+        
+        9: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Os sintomas que você selecionou tem <span class="destaque">atrapalhado a sua vida?</span></h1>
+          <button class="btn" onclick="proximaEtapa()">✅ Sim, demais!</button>
+          <button class="btn" onclick="proximaEtapa()">😭 Sim, está tão normal na minha vida que eu já até acostumel.</button>
+          <button class="btn" onclick="proximaEtapa()">🤔 Se você não tivesse falhado, eu nem saberia que poderia ser parasitose.</button>
+          <button class="btn" onclick="proximaEtapa()">😞 Não me atrapalha não.</button>
+        `,
+        
+        10: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <div class="alert">⚠️ Os Resultados Não Mentem: Seus Sintomas estão indicando Algo Muito Perigoso – Ouça Com Atenção!</div>
+          <h1>Escute essa rápida explicação 👇</h1>
+          <p class="subtitulo">Caso o áudio não inicie, basta clicar nele!</p>
+          <div class="audio-container">
+            <img src="https://media.inlead.cloud/uploads/23849/2025-03-16/e74dh-1c172578-ae85-4a3b-9d21-47d37bc1.jpg" alt="Ana Lima" class="audio-avatar">
+            <audio controls style="flex: 1;">
+              <source src="./assets/dfkt7-audio-da-pg-10__10_.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+          <h3 style="margin-top: 30px; margin-bottom: 10px;">Veja se esse caso</h3>
+          <p class="subtitulo">1 semana após iniciar a desparasitação</p>
+          <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-xnevS-1-semana-apos-a-desparasitacao-diabetica.webp" alt="" style="width: 100%; margin: 20px 0; border-radius: 8px;">
+          <div class="depoimento">
+            <div class="depoimento-header">
+              <img src="https://media.inlead.cloud/uploads/23849/2025-03-16/xs-jsanr-052c3f29-8497-4e08-a53e-dd72f5ee.jpg" alt="Rita" class="avatar">
+              <div class="depoimento-info">
+                <p class="depoimento-name">Rita Limeira</p>
+                <p class="depoimento-local">Porto Alegre, RS</p>
+              </div>
+            </div>
+            <p>Muito obrigada Ana, já o desparasitando a 30 dias, e meus níveis de glicose estão estáveis, to muito feliz por essa vitória em minha vida 😻😻😻 obrigada vc foi um anjo.</p>
+          </div>
+          <button class="btn" onclick="proximaEtapa()">Continuar</button>
+        `,
+        
+        11: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Você teria interesse em receber um <span class="destaque">protocolo personalizado</span> para Desparasitação em 14 dias?</h1>
+          <button class="btn" onclick="proximaEtapa()">✅ Sim, Eu quero demais!</button>
+          <button class="btn" onclick="proximaEtapa()">😕 Tenho interesse, mas quero tirar dúvidas.</button>
+        `,
+        
+        12: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Você está utilizando algum desses medicamentos atualmente?</h1>
+          <div class="opcao" onclick="selecionarRadio(this)"><input type="radio" name="medicamento"><span class="opcao-text">Metformina</span></div>
+          <div class="opcao" onclick="selecionarRadio(this)"><input type="radio" name="medicamento"><span class="opcao-text">Glifage</span></div>
+          <div class="opcao" onclick="selecionarRadio(this)"><input type="radio" name="medicamento"><span class="opcao-text">Glicazida</span></div>
+          <div class="opcao" onclick="selecionarRadio(this)"><input type="radio" name="medicamento"><span class="opcao-text">Glimepirida</span></div>
+          <div class="opcao" onclick="selecionarRadio(this)"><input type="radio" name="medicamento"><span class="opcao-text">Insulina</span></div>
+          <div class="opcao" onclick="selecionarRadio(this)"><input type="radio" name="medicamento"><span class="opcao-text">Uso outros medicamentos</span></div>
+          <div class="opcao" onclick="selecionarRadio(this)"><input type="radio" name="medicamento"><span class="opcao-text">Não uso nada no momento</span></div>
+          <button class="btn" onclick="proximaEtapa()">Continuar</button>
+        `,
+        
+        13: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Com que frequência você realiza monitoramento da sua glicose?</h1>
+          <div class="opcao" onclick="selecionarRadio(this)"><input type="radio" name="frequencia"><span class="opcao-text">SEMPRE ANTES DE COMER ⚠️</span></div>
+          <div class="opcao" onclick="selecionarRadio(this)"><input type="radio" name="frequencia"><span class="opcao-text">UMA VEZ AO DIA ✅</span></div>
+          <div class="opcao" onclick="selecionarRadio(this)"><input type="radio" name="frequencia"><span class="opcao-text">VÁRIAS VEZES AO DIA 😍</span></div>
+          <div class="opcao" onclick="selecionarRadio(this)"><input type="radio" name="frequencia"><span class="opcao-text">ALGUMAS VEZES NA SEMANA 💗</span></div>
+          <div class="opcao" onclick="selecionarRadio(this)"><input type="radio" name="frequencia"><span class="opcao-text">AINDA NÃO FAÇO 😕</span></div>
+        `,
+        
+        14: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Você concorda comigo que a nossa saúde é o <span class="destaque">nosso bem mais importante?</span></h1>
+          <p class="subtitulo">sem ela não somos nada.</p>
+          <button class="btn" onclick="proximaEtapa()">✅ Concordo!</button>
+          <button class="btn" onclick="proximaEtapa()">😢 Não concordo.</button>
+        `,
+        
+        15: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Você se compromete em seguir nosso <span class="destaque">Protocolo de 14 Dias</span> em Casa?</h1>
+          <p class="subtitulo">vou te ajudar em tudo o que precisar.</p>
+          <button class="btn" onclick="proximaEtapa()">😊 Sim eu me Comprometo!</button>
+          <button class="btn" onclick="proximaEtapa()">😢 Eu vou Tentar!</button>
+          <div class="carousel">
+            <img id="carouselImg" src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-c3Mh3-zu7w1-6b1fdf2a-dc98-4477-a62c-0f2a252f3583.webp" alt="">
+            <div class="carousel-dots">
+              <span class="dot active" onclick="mudarCarousel(0)"></span>
+              <span class="dot" onclick="mudarCarousel(1)"></span>
+              <span class="dot" onclick="mudarCarousel(2)"></span>
+            </div>
+          </div>
+        `,
+        
+        16: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <h1>Escute o áudio abaixo: 👇</h1>
+          <p class="subtitulo">Caso o ÁUDIO não inicie, basta clicar nele!</p>
+          <div class="audio-container">
+            <img src="https://media.inlead.cloud/uploads/23849/2025-03-16/e74dh-1c172578-ae85-4a3b-9d21-47d37bc1.jpg" alt="Ana Lima" class="audio-avatar">
+            <audio controls style="flex: 1;">
+              <source src="./assets/a0msx-audio-da-pg-16__3_.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+          <h3 style="margin-top: 30px; margin-bottom: 10px;">Veja só esse caso</h3>
+          <p class="subtitulo">1 semana após iniciar a desparasitação</p>
+          <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-1mL4h-antes-de-desparasitar-x-depois-de-desparasitar-diabetes.webp" alt="" style="width: 100%; margin: 20px 0; border-radius: 8px;">
+          <button class="btn" onclick="proximaEtapa()">Gerar Protocolo Personalizado! ✅</button>
+        `,
+        
+        17: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-XBkyA-y26an-5e731825-0bd2-4c2d-9a93-7f94e7ec.webp" alt="" style="width: 100%; margin: 20px 0; border-radius: 8px;">
+          <div class="progress-container">
+            <div class="progress-label">Montando protocolo personalizado</div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress1"></div>
+              <div class="progress-percent">0%</div>
+            </div>
+          </div>
+          <div class="progress-container">
+            <div class="progress-label">Estamos analisando suas respostas</div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress2"></div>
+              <div class="progress-percent">0%</div>
+            </div>
+          </div>
+        `,
+        
+        18: `
+          <div class="header-bar"></div>
+          <div class="header-logo">
+            <div class="header-logo-small">PROTOCOLO DE</div>
+            <div class="header-logo-large">Diabetes</div>
+          </div>
+          <div class="alert" style="background: white; color: #27ae60; border: 2px solid #27ae60;">🎁 Protocolo Gerado com SUCESSO!</div>
+          <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-0C0tE-o-seu-protocolo-exclusivo-esta-pronto.webp" alt="" style="width: 100%; margin: 20px 0; border-radius: 8px;">
+          <div class="before-after">
+            <div class="ba-item">
+              <div class="ba-label">ANTES</div>
+              <img src="${generoSelecionado === 'homem' ? 'https://media.inlead.cloud/uploads/23849/2025-10-24/md-4zYfv-antes-homem-diabetes.webp' : 'https://media.inlead.cloud/uploads/23849/2025-10-24/md-TJQpL-antes-mulher-diabetes.webp'}" alt="">
+              <div class="ba-progress"><div class="ba-progress-fill"></div></div>
+            </div>
+            <div class="ba-item">
+              <div class="ba-label">DEPOIS</div>
+              <img src="${generoSelecionado === 'homem' ? 'https://media.inlead.cloud/uploads/23849/2025-10-24/md-N3qXX-depois-homem-diabetes.webp' : 'https://media.inlead.cloud/uploads/23849/2025-10-24/md-K31SJ-depois-mulher-diabetes.webp'}" alt="">
+              <div class="ba-progress"><div class="ba-progress-fill" style="width: 100%;"></div></div>
+            </div>
+          </div>
+          <h3 style="text-align: center; margin: 30px 0 10px;">Escuta a Áudio abaixo: 👇</h3>
+          <p class="subtitulo" style="text-align: center;">Caso o ÁUDIO não inicie, basta clicar nele!</p>
+          <div class="audio-container">
+            <img src="https://media.inlead.cloud/uploads/23849/2025-03-16/e74dh-1c172578-ae85-4a3b-9d21-47d37bc1.jpg" alt="Ana Lima" class="audio-avatar">
+            <audio controls style="flex: 1;">
+              <source src="./assets/aigds-audio-pg-18__4_.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+          <img src="https://media.inlead.cloud/uploads/23849/2026-03-15/lg-LjFz0-whatsapp-image-2026-03-15-at-162502.jpg" alt="" style="width: 100%; margin: 20px 0; border-radius: 8px;">
+          <button class="btn" onclick="proximaEtapa()">Acessar meu Protocolo Agora 🔒</button>
+          <div class="depoimento">
+            <div class="depoimento-header">
+              <img src="https://media.inlead.cloud/uploads/23849/2025-03-16/xs-zryna-855c9d82-1e07-41d2-af47-249f6464.jpg" alt="Roberto" class="avatar">
+              <div class="depoimento-info">
+                <p class="depoimento-name">Roberto Lira</p>
+                <p class="depoimento-local">JOÃO PESSOA, PB</p>
+              </div>
+            </div>
+            <p>Muito obrigado Ana, fiz tudo como vc me passou e já tem 3 meses que não tomo mais nenhum remedio, to livre da diabetes e saudavel.</p>
+          </div>
+          <button class="btn" onclick="proximaEtapa()">Acessar meu Protocolo Agora 🔒</button>
+          <div class="badge-30">
+            <div class="badge-30-num">30</div>
+            <div class="badge-30-text">DIAS</div>
+          </div>
+          <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-DWDgm-teste-seguro-garantia-30-dias-diabetes.webp" alt="" style="width: 100%; margin: 20px 0; border-radius: 8px;">
+          <button class="btn" onclick="proximaEtapa()">Acessar meu Protocolo Agora 🔒</button>
+          <div class="video-container">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/gZK0AybZlRU?si=zWQcZZeDmnVN3EOB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+          <button class="btn" onclick="alert('🎉 Quiz Finalizado!'); etapaAtual = 1; mostrarEtapa(1)">Recomeçar Quiz</button>
+        `
+      };
+      
+      return html[numero] || '';
+    }
+    
+    function mostrarEtapa(numero) {
+      if (numero < 1 || numero > totalEtapas) return;
+      
+      const container = document.getElementById('container');
+      container.innerHTML = renderEtapa(numero);
+      window.scrollTo(0, 0);
+      
+      if (numero === 17) {
+        setTimeout(() => startProgress(), 100);
+      }
+      
+      if (numero === 15) {
+        iniciarCarrossel();
       }
     }
     
     function proximaEtapa() {
       if (etapaAtual < totalEtapas) {
         etapaAtual++;
-        carregarEtapa(etapaAtual);
+        mostrarEtapa(etapaAtual);
       }
     }
     
-    // Inicializar
-    carregarEtapa(1);
+    function selecionarGenero(genero) {
+      generoSelecionado = genero;
+    }
+    
+    function selecionarRadio(el) {
+      const parent = el.parentElement;
+      const radios = parent.querySelectorAll('.opcao');
+      radios.forEach(r => r.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+    
+    function startProgress() {
+      if (progressInterval) clearInterval(progressInterval);
+      let prog = 0;
+      const fills = document.querySelectorAll('.progress-fill');
+      const percents = document.querySelectorAll('.progress-percent');
+      
+      progressInterval = setInterval(() => {
+        prog += Math.random() * 25;
+        if (prog > 100) prog = 100;
+        
+        fills.forEach(fill => fill.style.width = prog + '%');
+        percents.forEach(percent => percent.textContent = Math.round(prog) + '%');
+        
+        if (prog >= 100) {
+          clearInterval(progressInterval);
+          setTimeout(() => proximaEtapa(), 2000);
+        }
+      }, 800);
+    }
+    
+    const carouselImages = [
+      'https://media.inlead.cloud/uploads/23849/2025-10-24/lg-c3Mh3-zu7w1-6b1fdf2a-dc98-4477-a62c-0f2a252f3583.webp',
+      'https://media.inlead.cloud/uploads/23849/2025-10-24/lg-qfpvp-q6tg1-6b977cba-2976-45a2-b475-25fa34a08eb4.webp',
+      'https://media.inlead.cloud/uploads/23849/2025-10-24/lg-jTuJB-tzrcl-4a2fc861-6738-4ce9-a50d-9eeef039d79f.webp'
+    ];
+    let carouselIndex = 0;
+    let carouselInterval = null;
+    
+    function iniciarCarrossel() {
+      if (carouselInterval) clearInterval(carouselInterval);
+      carouselInterval = setInterval(() => {
+        carouselIndex = (carouselIndex + 1) % carouselImages.length;
+        mudarCarousel(carouselIndex);
+      }, 4000);
+    }
+    
+    function mudarCarousel(index) {
+      carouselIndex = index;
+      document.getElementById('carouselImg').src = carouselImages[index];
+      document.querySelectorAll('.dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+      if (carouselInterval) clearInterval(carouselInterval);
+      iniciarCarrossel();
+    }
+    
+    mostrarEtapa(1);
   </script>
 </body>
 </html>
