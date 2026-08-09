@@ -23,8 +23,7 @@
     .header-bar { width: 60px; height: 4px; background: #27ae60; margin-bottom: 30px; }
     .back-btn { position: absolute; top: 20px; left: 20px; background: none; border: none; cursor: pointer; font-size: 24px; color: transparent; width: 40px; height: 40px; }
     .header-logo { text-align: center; margin-bottom: 20px; }
-    .header-logo-small { font-size: 12px; color: #27ae60; letter-spacing: 2px; font-weight: 600; }
-    .header-logo-large { font-size: 36px; color: #27ae60; font-weight: bold; font-style: italic; }
+    .header-logo img { max-width: 200px; height: auto; }
     
     /* TÍTULOS */
     h1 { font-size: 22px; font-weight: bold; margin: 20px 0 10px; line-height: 1.4; }
@@ -103,6 +102,23 @@
     .badge-30-text { font-size: 12px; font-weight: bold; }
     
     img { max-width: 100%; height: auto; }
+
+    /* BULLET SIMPLES (etapa 8) */
+    .opcao-bullet { border: 2px solid #e0e0e0; border-radius: 8px; padding: 16px; margin: 10px 0; display: flex; align-items: center; gap: 12px; }
+    .bullet-dot { color: #333; font-size: 18px; font-weight: bold; flex-shrink: 0; }
+
+    /* BOTÃO SELECIONÁVEL CENTRALIZADO (etapa 12) */
+    .opcao-btn-sel { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 16px; margin: 10px 0; text-align: center; cursor: pointer; font-weight: bold; font-size: 15px; color: #27ae60; transition: background 0.2s; }
+    .opcao-btn-sel:hover { border-color: #27ae60; }
+    .opcao-btn-sel.selected { background: #27ae60; color: white; border-color: #27ae60; }
+
+    /* OPÇÃO COM EMOJI (etapas 4, 6, 13) */
+    .opcao-freq { border: 2px solid #e0e0e0; border-radius: 8px; padding: 16px 20px; margin: 10px 0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; gap: 12px; }
+    .opcao-freq:hover { border-color: #27ae60; }
+    .freq-texto { font-weight: bold; font-size: 15px; flex: 1; text-align: center; }
+    .freq-emoji { font-size: 22px; flex-shrink: 0; }
+    .freq-radio { flex-shrink: 0; }
+    .freq-radio input { width: 18px; height: 18px; }
   </style>
 </head>
 <body>
@@ -123,8 +139,17 @@
       1: {
         hasHeader: false,
         html: `
-          <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-bHp0d-urgente-truque-caseiro-diabetes.webp" alt="" style="width: 100%; border-radius: 8px;">
-          <button class="btn" onclick="proximaEtapa()">QUERO APRENDER TAMBÉM!</button>
+          <h1 style="text-align:center; margin-bottom:15px;"><span style="background:#000;color:#fff;padding:2px 8px;border-radius:3px;display:inline-block;font-size:18px;">URGENTE:</span> <span class="destaque">Médico Chinês Ensina Receita</span> que livrou <span class="destaque">15 mil Diabéticos da amputação e remédios como Glifage e Insulina</span> revertendo a Diabetes em 14 dias.</h1>
+          <p style="text-align:center;color:#27ae60;font-weight:700;font-size:13px;margin:0 0 20px;line-height:1.6;text-transform:uppercase;">Responda esse teste gratuito e aprenda como eliminar o parasita comedor de insulina e reverta sua diabetes.</p>
+          <img src="https://media.inlead.cloud/uploads/23849/2026-06-01/lg-cOPiU-imagem-comprimida-primeira-etapa.png" alt="" style="width:100%;border-radius:8px;margin-bottom:20px;">
+          <p style="text-align:center;font-weight:bold;margin-bottom:15px;">LIVRE-SE DOS REMÉDIOS E COMA O QUE QUISER <span class="destaque">SEM MEDO.</span></p>
+          <ul style="list-style:none;margin-bottom:20px;padding:0;">
+            <li class="destaque" style="margin-bottom:8px;font-weight:bold;">• Teste de Parasitas</li>
+            <li class="destaque" style="margin-bottom:8px;font-weight:bold;">• Resultado Instantâneo</li>
+            <li class="destaque" style="margin-bottom:8px;font-weight:bold;">• Receita Completa</li>
+            <li class="destaque" style="margin-bottom:8px;font-weight:bold;">• Enviamos no Seu WhatsApp</li>
+          </ul>
+          <button class="btn" onclick="irParaEtapa(3)">QUERO APRENDER TAMBÉM !</button>
         `
       },
       2: {
@@ -147,44 +172,60 @@
       3: {
         hasHeader: true,
         html: `
-          <h1>Você sente algum desses sintomas <span class="destaque">A MAIS DE 1 ANO?</span></h1>
           <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-bWhOM-voce-sente-algum-sintoma.webp" alt="" style="width: 100%; margin: 20px 0; border-radius: 8px;">
-          <button class="btn" onclick="proximaEtapa()">Sinto mais de 1 👍</button>
-          <button class="btn" onclick="proximaEtapa()">Sinto 2 ou mais 😊</button>
+          <button class="btn" onclick="proximaEtapa()">Sinto mais de 1 🤯</button>
+          <button class="btn" onclick="proximaEtapa()">Sinto 2 ou mais 🤩</button>
         `
       },
       4: {
         hasHeader: true,
         html: `
-          <h1>Você já <span class="destaque">Desparasitou</span> de alguma maneira?</h1>
-          <p class="subtitulo">Utilizando remédios ou formas naturais.</p>
-          <button class="btn" onclick="proximaEtapa()">😁 Não, eu nunca desparasitei.</button>
-          <button class="btn" onclick="proximaEtapa()">😭 Sim, eu já desparasitei.</button>
+          <h1 style="text-align:center;">Você já <span class="destaque">Desparasitou</span> de alguma maneira?</h1>
+          <p class="subtitulo" style="text-align:center;">Utilizando remédios ou formas naturais.</p>
+          <div class="opcao-freq" onclick="proximaEtapa()">
+            <span class="freq-emoji">🤩</span>
+            <span class="freq-texto">Não, eu nunca desparasitei.</span>
+            <span class="freq-radio"><input type="radio" onclick="event.stopPropagation()"></span>
+          </div>
+          <div class="opcao-freq" onclick="proximaEtapa()">
+            <span class="freq-emoji">🤯</span>
+            <span class="freq-texto">Sim, eu já desparasitei.</span>
+            <span class="freq-radio"><input type="radio" onclick="event.stopPropagation()"></span>
+          </div>
         `
       },
       5: {
         hasHeader: true,
         html: `
-          <div class="alert-red">
-            <strong>Se você nunca fez uma Desparasitação Natural, cuidado: os vermes podem se multiplicar no seu corpo e alcançar órgãos vitais como cérebro, coração e pulmões. Não ignore esse risco, é <span class="destaque">essencial desparasitar pelo menos uma vez ao ano</span></strong>
+          <div class="alert-red" style="text-align:center;">
+            <strong style="color:#e74c3c;">Se você nunca fez uma Desparasitação Natural,<br>cuidado:</strong> <strong style="color:#e74c3c;">os vermes podem se multiplicar no seu corpo e alcançar órgãos vitais como cérebro, coração e pulmões. Não ignore esse risco,</strong> <strong style="color:#27ae60;">é essencial desparasitar pelo menos uma vez ao ano!</strong>
           </div>
-          <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-3rmMi-jovem-morre-diabetes.webp" alt="" style="width: 100%; margin: 20px 0; border-radius: 8px;">
+          <p style="text-align:center;margin:15px 0;"><a href="#" style="color:#333;font-weight:bold;text-decoration:underline;">Veja essa Notícia do G1 👇</a></p>
+          <img src="https://media.inlead.cloud/uploads/23849/2025-10-24/lg-3rmMi-jovem-morre-diabetes.webp" alt="" style="width: 100%; margin: 0 0 20px; border-radius: 8px;">
           <button class="btn" onclick="proximaEtapa()">Continuar!</button>
         `
       },
       6: {
         hasHeader: true,
         html: `
-          <h1>Você tem ciência que a <span class="destaque">falta de cuidados com esse assunto pode piorar sua diabetes e deixar sequelas que podem ser irreversíveis?</span></h1>
-          <p class="subtitulo">Por favor, seja sincero.</p>
-          <button class="btn" onclick="proximaEtapa()">✌️ Sim, eu sei da gravidade que o ter parasitas habitando o meu intestino.</button>
-          <button class="btn" onclick="proximaEtapa()">❤️ Não sabia da gravidade, mais quero cuidar.</button>
+          <h1 style="text-align:center;">Você tem ciência que a <span class="destaque">falta de cuidados com esse assunto pode piorar sua diabetes e deixar sequelas que podem ser irreversíveis?</span></h1>
+          <p class="subtitulo" style="text-align:center;">Por favor, seja sincero.</p>
+          <div class="opcao-freq" onclick="proximaEtapa()">
+            <span class="freq-emoji">😤</span>
+            <span class="freq-texto">Sim, eu sei da gravidade que é ter parasitas habitando o meu intestino.</span>
+            <span class="freq-radio"><input type="radio" onclick="event.stopPropagation()"></span>
+          </div>
+          <div class="opcao-freq" onclick="proximaEtapa()">
+            <span class="freq-emoji">🤩</span>
+            <span class="freq-texto">Não sabia da gravidade, mais quero cuidar.</span>
+            <span class="freq-radio"><input type="radio" onclick="event.stopPropagation()"></span>
+          </div>
         `
       },
       7: {
         hasHeader: true,
         html: `
-          <h1>Você concorda comigo que na maioria das vezes o consumo Exagerado de Doces e a má <span class="destaque">alimentação não é nossa culpa, somos taxados como desequilibrados mas isso se deve ao nosso organismo estar inflamado por conta de parasitas intestinais?</span></h1>
+          <h1 style="text-align:center;">Você concorda comigo que na maioria das vezes o consumo <span class="destaque">Exagerado de Doces</span> e a má <span class="destaque">alimentação não é nossa culpa,</span> somos taxados como desequilibrados mas isso se deve ao nosso organismo estar inflamado por conta de parasitas intestinais?</h1>
           <p class="subtitulo">Por favor, seja sincera, quero ajudar!</p>
           <button class="btn" onclick="proximaEtapa()">Eu concordo sim!</button>
           <button class="btn" onclick="proximaEtapa()">Concordo em partes.</button>
@@ -193,21 +234,21 @@
       8: {
         hasHeader: true,
         html: `
-          <h1>Dentro dos <span class="destaque">sintomas listados abaixo</span>, quais mais te incomodam?</h1>
-          <p class="subtitulo">Selecione um a mais.</p>
-          <div class="opcao-check" onclick="toggleCheckbox(this)"><input type="checkbox"><span>INSÔNIA</span></div>
-          <div class="opcao-check" onclick="toggleCheckbox(this)"><input type="checkbox"><span>FADIGA</span></div>
-          <div class="opcao-check" onclick="toggleCheckbox(this)"><input type="checkbox"><span>SEDE EXCESSIVA</span></div>
-          <div class="opcao-check" onclick="toggleCheckbox(this)"><input type="checkbox"><span>FORMIGAMENTO</span></div>
-          <div class="opcao-check" onclick="toggleCheckbox(this)"><input type="checkbox"><span>VISÃO EMBAÇADA</span></div>
-          <div class="opcao-check" onclick="toggleCheckbox(this)"><input type="checkbox"><span>DORES NO CORPO</span></div>
+          <h1 style="text-align:center;">Dentro dos <span class="destaque">sintomas listados abaixo</span>, quais mais te incomodam?</h1>
+          <p class="subtitulo" style="text-align:center;">Selecione um a mais.</p>
+          <div class="opcao-bullet"><span class="bullet-dot">•</span><span>INSÔNIA</span></div>
+          <div class="opcao-bullet"><span class="bullet-dot">•</span><span>FADIGA</span></div>
+          <div class="opcao-bullet"><span class="bullet-dot">•</span><span>SEDE EXCESSIVA</span></div>
+          <div class="opcao-bullet"><span class="bullet-dot">•</span><span>FORMIGAMENTO</span></div>
+          <div class="opcao-bullet"><span class="bullet-dot">•</span><span>VISÃO EMBAÇADA</span></div>
+          <div class="opcao-bullet"><span class="bullet-dot">•</span><span>DORES NO CORPO</span></div>
           <button class="btn" onclick="proximaEtapa()">Continuar</button>
         `
       },
       9: {
         hasHeader: true,
         html: `
-          <h1>Os sintomas que você selecionou tem <span class="destaque">atrapalhado a sua vida?</span></h1>
+          <h1 style="text-align:center;">Os sintomas que você selecionou tem <span class="destaque">atrapalhado a sua vida?</span></h1>
           <button class="btn" onclick="proximaEtapa()">✅ Sim, demais!</button>
           <button class="btn" onclick="proximaEtapa()">😭 Sim, está tão normal na minha vida que eu já até acostumel.</button>
           <button class="btn" onclick="proximaEtapa()">🤔 Se você não tivesse falhado, eu nem saberia que poderia ser parasitose.</button>
@@ -221,8 +262,11 @@
           <h1>Escute essa rápida explicação 👇</h1>
           <p class="subtitulo">Caso o áudio não inicie, basta clicar nele!</p>
           <div class="audio-container">
-            <img src="https://media.inlead.cloud/uploads/23849/2025-03-16/e74dh-1c172578-ae85-4a3b-9d21-47d37bc1.jpg" alt="" class="audio-avatar">
-            <audio controls><source src="./assets/dfkt7-audio-da-pg-10__13_.mp3" type="audio/mpeg"></audio>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;">
+              <img src="https://media.inlead.cloud/uploads/23849/2026-03-17/RR4pI-foto-perfil-pjfif.jpg" alt="" class="audio-avatar">
+              <span style="font-size:11px;font-weight:bold;color:#27ae60;">Dr. Ricardo</span>
+            </div>
+            <audio controls><source src="./assets/TcxHE-dr-ricardo-audio-1.mp3" type="audio/mpeg"></audio>
           </div>
           <h3 style="margin: 30px 0 10px; font-weight: bold;">Veja se esse caso</h3>
           <p class="subtitulo">1 semana após iniciar a desparasitação</p>
@@ -240,7 +284,7 @@
       11: {
         hasHeader: true,
         html: `
-          <h1>Você teria interesse em receber um <span class="destaque">protocolo personalizado</span> para Desparasitação em 14 dias?</h1>
+          <h1 style="text-align:center;">Você teria interesse em receber um <span class="destaque">protocolo personalizado</span> para Desparasitação em 14 dias?</h1>
           <button class="btn" onclick="proximaEtapa()">✅ Sim, Eu quero demais!</button>
           <button class="btn" onclick="proximaEtapa()">😕 Tenho interesse, mas quero tirar dúvidas.</button>
         `
@@ -248,26 +292,26 @@
       12: {
         hasHeader: true,
         html: `
-          <h1>Você está utilizando algum desses medicamentos atualmente?</h1>
-          <div class="opcao-radio" onclick="toggleRadio(this, 'medicamento')"><input type="radio" name="medicamento"><span>Metformina</span></div>
-          <div class="opcao-radio" onclick="toggleRadio(this, 'medicamento')"><input type="radio" name="medicamento"><span>Glifage</span></div>
-          <div class="opcao-radio" onclick="toggleRadio(this, 'medicamento')"><input type="radio" name="medicamento"><span>Glicazida</span></div>
-          <div class="opcao-radio" onclick="toggleRadio(this, 'medicamento')"><input type="radio" name="medicamento"><span>Glimepirida</span></div>
-          <div class="opcao-radio" onclick="toggleRadio(this, 'medicamento')"><input type="radio" name="medicamento"><span>Insulina</span></div>
-          <div class="opcao-radio" onclick="toggleRadio(this, 'medicamento')"><input type="radio" name="medicamento"><span>Uso outros medicamentos</span></div>
-          <div class="opcao-radio" onclick="toggleRadio(this, 'medicamento')"><input type="radio" name="medicamento"><span>Não uso nada no momento</span></div>
+          <h1 style="text-align:center;">Você está utilizando algum desses medicamentos atualmente?</h1>
+          <div class="opcao-btn-sel" onclick="toggleBtn(this,'medicamento')">Metformina</div>
+          <div class="opcao-btn-sel" onclick="toggleBtn(this,'medicamento')">Glifage</div>
+          <div class="opcao-btn-sel" onclick="toggleBtn(this,'medicamento')">Glicazida</div>
+          <div class="opcao-btn-sel" onclick="toggleBtn(this,'medicamento')">Glimepirida</div>
+          <div class="opcao-btn-sel" onclick="toggleBtn(this,'medicamento')">Insulina</div>
+          <div class="opcao-btn-sel" onclick="toggleBtn(this,'medicamento')">Uso outros medicamentos</div>
+          <div class="opcao-btn-sel" onclick="toggleBtn(this,'medicamento')">Não uso nada no momento</div>
           <button class="btn" onclick="proximaEtapa()">Continuar</button>
         `
       },
       13: {
         hasHeader: true,
         html: `
-          <h1>Com que frequência você realiza monitoramento da sua glicose?</h1>
-          <div class="opcao-radio" onclick="toggleRadio(this, 'frequencia')"><input type="radio" name="frequencia"><span>SEMPRE ANTES DE COMER ⚠️</span></div>
-          <div class="opcao-radio" onclick="toggleRadio(this, 'frequencia')"><input type="radio" name="frequencia"><span>UMA VEZ AO DIA ✅</span></div>
-          <div class="opcao-radio" onclick="toggleRadio(this, 'frequencia')"><input type="radio" name="frequencia"><span>VÁRIAS VEZES AO DIA 😍</span></div>
-          <div class="opcao-radio" onclick="toggleRadio(this, 'frequencia')"><input type="radio" name="frequencia"><span>ALGUMAS VEZES NA SEMANA 💗</span></div>
-          <div class="opcao-radio" onclick="toggleRadio(this, 'frequencia')"><input type="radio" name="frequencia"><span>AINDA NÃO FAÇO 😕</span></div>
+          <h1 style="text-align:center;">Com que frequência você realiza monitoramento da sua glicose?</h1>
+          <div class="opcao-freq" onclick="proximaEtapa()"><span class="freq-texto">SEMPRE ANTES DE COMER</span><span class="freq-emoji">⚠️</span></div>
+          <div class="opcao-freq" onclick="proximaEtapa()"><span class="freq-texto">UMA VEZ AO DIA</span><span class="freq-emoji">✅</span></div>
+          <div class="opcao-freq" onclick="proximaEtapa()"><span class="freq-texto">VÁRIAS VEZES AO DIA</span><span class="freq-emoji">😤</span></div>
+          <div class="opcao-freq" onclick="proximaEtapa()"><span class="freq-texto">ALGUMAS VEZES NA SEMANA</span><span class="freq-emoji">💧</span></div>
+          <div class="opcao-freq" onclick="proximaEtapa()"><span class="freq-texto">AINDA NÃO FAÇO</span><span class="freq-emoji">😬</span></div>
         `
       },
       14: {
@@ -303,7 +347,7 @@
           <p class="subtitulo">Caso o ÁUDIO não inicie, basta clicar nele!</p>
           <div class="audio-container">
             <img src="https://media.inlead.cloud/uploads/23849/2025-03-16/e74dh-1c172578-ae85-4a3b-9d21-47d37bc1.jpg" alt="" class="audio-avatar">
-            <audio controls><source src="./assets/a0msx-audio-da-pg-16__3_.mp3" type="audio/mpeg"></audio>
+            <audio controls><source src="./assets/a0msx-audio-da-pg-16__2_.mp3" type="audio/mpeg"></audio>
           </div>
           <h3 style="margin: 30px 0 10px; font-weight: bold;">Veja só esse caso</h3>
           <p class="subtitulo">1 semana após iniciar a desparasitação</p>
@@ -353,7 +397,7 @@
           <p class="subtitulo" style="text-align: center;">Caso o ÁUDIO não inicie, basta clicar nele!</p>
           <div class="audio-container">
             <img src="https://media.inlead.cloud/uploads/23849/2025-03-16/e74dh-1c172578-ae85-4a3b-9d21-47d37bc1.jpg" alt="" class="audio-avatar">
-            <audio controls><source src="./assets/aigds-audio-pg-18__4_.mp3" type="audio/mpeg"></audio>
+            <audio controls><source src="./assets/aigds-audio-pg-18__3_.mp3" type="audio/mpeg"></audio>
           </div>
           <img src="https://media.inlead.cloud/uploads/23849/2026-03-15/lg-LjFz0-whatsapp-image-2026-03-15-at-162502.jpg" alt="" style="width: 100%; margin: 20px 0; border-radius: 8px;">
           <button class="btn" onclick="proximaEtapa()">Acessar meu Protocolo Agora 🔒</button>
@@ -388,11 +432,8 @@
       let html = '';
       if (etapa.hasHeader) {
         html += `
+          <img src="./assets/logo-header.png" alt="Protocolo da Diabetes" style="max-width: 200px; margin: 0 auto 20px; display: block;">
           <div class="header-bar"></div>
-          <div class="header-logo">
-            <div class="header-logo-small">PROTOCOLO DE</div>
-            <div class="header-logo-large">Diabetes</div>
-          </div>
         `;
       }
       html += etapa.html;
@@ -403,6 +444,11 @@
       if (etapa.onShow) etapa.onShow();
     }
     
+    function irParaEtapa(num) {
+      etapaAtual = num;
+      mostrarEtapa(etapaAtual);
+    }
+
     function proximaEtapa() {
       if (etapaAtual < totalEtapas) {
         etapaAtual++;
@@ -421,13 +467,25 @@
       generoSelecionado = genero;
     }
     
+    function toggleBtn(el, group) {
+      document.querySelectorAll(`.opcao-btn-sel`).forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
     function toggleCheckbox(el) {
       el.classList.toggle('selected');
+      const input = el.querySelector('input[type="checkbox"]');
+      if (input) input.checked = el.classList.contains('selected');
     }
     
     function toggleRadio(el, name) {
-      document.querySelectorAll(`.opcao-radio input[name="${name}"]`).forEach(r => r.parentElement.classList.remove('selected'));
+      document.querySelectorAll(`.opcao-radio input[name="${name}"]`).forEach(r => {
+        r.parentElement.classList.remove('selected');
+        r.checked = false;
+      });
       el.classList.add('selected');
+      const input = el.querySelector('input[type="radio"]');
+      if (input) input.checked = true;
     }
     
     function startProgress() {
